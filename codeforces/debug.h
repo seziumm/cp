@@ -114,4 +114,139 @@
 #include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
+
 #endif
+
+namespace __DEBUG_UTIL__ {
+
+  void print(const char *x) { std::cerr << x; }
+  void print(bool x) { std::cerr << x; }
+  void print(char x) { std::cerr << '\'' << x << '\''; }
+  void print(signed short int x) { std::cerr << x; }
+  void print(unsigned short int x) { std::cerr << x; }
+  void print(signed int x) { std::cerr << x; }
+  void print(unsigned int x) { std::cerr << x; }
+  void print(signed long int x) { std::cerr << x; }
+  void print(unsigned long int x) { std::cerr << x; }
+  void print(signed long long int x) { std::cerr << x; }
+  void print(unsigned long long int x) { std::cerr << x; }
+  void print(float x) { std::cerr << x; }
+  void print(double x) { std::cerr << x; }
+  void print(long double x) { std::cerr << x; }
+  void print(std::string x) { std::cerr << '\"' << x << '\"'; }
+
+  template <std::size_t N>
+  void print(std::bitset<N> x) { std::cerr << x; }
+
+  void print(std::vector<bool> &v) {
+    int f = 0;
+    std::cerr << '{';
+    for (auto &&i : v)
+      std::cerr << (f++ ? "," : "") << i;
+    std::cerr << "}";
+  }
+
+  // Templates declarations
+  template <typename T> void print(T &&x);
+  template <typename T> void print(std::vector<std::vector<T>> &mat);
+  template <typename T, std::size_t N, std::size_t M> void print(T (&mat)[N][M]);
+  template <typename F, typename S> void print(std::pair<F, S> x);
+  template <typename... T> void print(std::priority_queue<T...> pq);
+  template <typename T> void print(std::stack<T> st);
+  template <typename T> void print(std::queue<T> q);
+
+  // Generic container
+  template <typename T>
+  void print(T &&x) {
+    int f = 0;
+    std::cerr << '{';
+    for (auto &&i : x)
+      std::cerr << (f++ ? "," : ""), print(i);
+    std::cerr << "}";
+  }
+
+  // 2D vector
+  template <typename T>
+  void print(std::vector<std::vector<T>> &mat) {
+    int f = 0;
+    std::cerr << "\n~~~~~\n";
+    for (auto &&i : mat) {
+      std::cerr << std::setw(2) << std::left << f++, print(i), std::cerr << "\n";
+    }
+    std::cerr << "~~~~~\n";
+  }
+
+  // 2D array
+  template <typename T, std::size_t N, std::size_t M>
+  void print(T (&mat)[N][M]) {
+    int f = 0;
+    std::cerr << "\n~~~~~\n";
+    for (auto &&i : mat) {
+      std::cerr << std::setw(2) << std::left << f++, print(i), std::cerr << "\n";
+    }
+    std::cerr << "~~~~~\n";
+  }
+
+  // Pair
+  template <typename F, typename S>
+  void print(std::pair<F, S> x) {
+    std::cerr << '(';
+    print(x.first);
+    std::cerr << ',';
+    print(x.second);
+    std::cerr << ')';
+  }
+
+  // Priority Queue
+  template <typename... T>
+  void print(std::priority_queue<T...> pq) {
+    int f = 0;
+    std::cerr << '{';
+    while (!pq.empty())
+      std::cerr << (f++ ? "," : ""), print(pq.top()), pq.pop();
+    std::cerr << "}";
+  }
+
+  // Stack
+  template <typename T>
+  void print(std::stack<T> st) {
+    int f = 0;
+    std::cerr << '{';
+    while (!st.empty()) {
+      std::cerr << (f++ ? "," : ""), print(st.top()), st.pop();
+    }
+    std::cerr << "}";
+  }
+
+  // Queue
+  template <typename T>
+  void print(std::queue<T> q) {
+    int f = 0;
+    std::cerr << '{';
+    while (!q.empty())
+      std::cerr << (f++ ? "," : ""), print(q.front()), q.pop();
+    std::cerr << "}";
+  }
+
+  // Recursive printer
+  void printer(const char *) {}
+
+  template <typename T, typename... V>
+  void printer(const char *names, T &&head, V &&...tail) {
+    int i = 0;
+    for (std::size_t bracket = 0; names[i] != '\0' &&
+         (names[i] != ',' || bracket != 0); i++) {
+      if (names[i] == '(' || names[i] == '<' || names[i] == '{')
+        bracket++;
+      else if (names[i] == ')' || names[i] == '>' || names[i] == '}')
+        bracket--;
+    }
+    std::cerr.write(names, i) << " = ";
+    print(head);
+    if (sizeof...(tail))
+      std::cerr << " |", printer(names + i + 1, tail...);
+    else
+      std::cerr << "\n";
+  }
+
+} // namespace __DEBUG_UTIL__
