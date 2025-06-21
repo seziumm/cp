@@ -1,12 +1,12 @@
 #ifdef MYDEBUG
   #include "debug.h"
+  #define USE_IO()
+#else
+  #include <bits/stdc++.h>
   #define USE_IO() do { \
     freopen("input.txt", "r", stdin); \
     freopen("output.txt", "w", stdout); \
   } while (0)
-#else
-  #include <bits/stdc++.h>
-  #define USE_IO()
 #endif
 
 using namespace std;
@@ -48,7 +48,6 @@ typedef ve<pbb>    vpbb;
 typedef ve<pbi>    vpbi;
 typedef ve<pbll>   vpbll;
 typedef ve<pbs>    vpbs;
-
 typedef ve<pib>    vpib;
 typedef ve<pii>    vpii;
 typedef ve<pill>   vpill;
@@ -109,7 +108,106 @@ typedef ve<vpss>   vvpss;
   #define dbe(...) 
 #endif
 
+
+void find_root(vvi &adj2, int &node) {
+  
+  if(adj2[node].empty()) return;
+  
+  node = adj2[node].front();
+  find_root(adj2, node);
+
+}
+
+
+void dfs(vvi &adj, int node, vi &dist, vi &citta, int g[]) {
+
+  if(adj[node].empty()) {
+    if(citta[node] == 0) {
+      dist[node] = 0;
+    }
+    else {
+      dist[node] = g[node];
+    }
+    return;
+  }
+
+  int cr = 0;
+
+  for(auto child : adj[node]) {
+    if(dist[child] == INT_MAX) {
+      dfs(adj, child, dist, citta, g);
+    }
+    cr += dist[child];
+    dbe(dist[child], node);
+
+  }
+
+  if(citta[node] > 0) {
+    dist[node] = g[node];
+    return;
+  }
+  dist[node] = min(cr, g[node]);
+}
+
+
+int pianifica(int n, int m, int da[], int a[], int c[], int g[]) {
+
+  vi citta(n, 0), dist(n, INT_MAX);
+
+  for(int i = 0; i < m; i++) {
+    citta[c[i]]++;
+  }
+
+  vvi adj(n);
+  vvi adj2(n);
+
+  int root = -1;
+
+  for(int i = 0; i < n - 1; i++) {
+    int aa, b;
+
+    aa = da[i];
+    b = a[i];
+
+    adj[aa].pb(b);
+    adj2[b].pb(aa);
+
+    root = aa;
+  }
+
+  find_root(adj2, root);
+
+  dfs(adj, root, dist, citta, g);
+
+  return dist[root];
+
+}
+
 void solve() {
+  USE_IO();
+  int n;
+  cin >> n;
+
+  vpii v(n);
+
+  for(auto &i : v) cin >> i.F >> i.S;
+
+  vi dp(366, 0);
+
+  for(int i = 0; i < n; i++) {
+    int end = v[i].S;
+    int dur = v[i].F;
+
+    int first = end - dur + 1;
+    while(first > 0) {
+      dp[end] = max(dp[end], dp[first - 1] + 1);
+      first--;
+      end--;
+    }
+  }
+  dbe(dp);
+  cout << maxve(dp);
+
 }
 
 int main() {
@@ -122,7 +220,7 @@ int main() {
 #endif
 
   int T = 1;
-  cin >> T;
+  // cin >> T;
 
   while (T--) solve();
 
