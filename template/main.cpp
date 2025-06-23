@@ -100,8 +100,8 @@ typedef ve<vpss>   vvpss;
 #define all(v)    (v).begin(),  (v).end()
 #define rall(v)   (v).rbegin(), (v).rend()
 
-#define maxve(v) (*std::max_element(all(v)))
-#define minve(v) (*std::min_element(all(v)))
+#define maxve(v) (*std::max_element(all(v))
+#define minve(v) (*std::min_element(all(v))
 
 #define FAST_IO ios::sync_with_stdio(0); cin.tie(0)
 
