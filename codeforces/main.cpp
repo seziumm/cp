@@ -1,12 +1,14 @@
 #ifdef MYDEBUG
   #include "debug.h"
+  #define USE_IO()
+  #define dbe(...) __DEBUG_UTIL__::printer(#__VA_ARGS__, __VA_ARGS__)
+#else
+  #include <bits/stdc++.h>
+  #define dbe(...) 
   #define USE_IO() do { \
     freopen("input.txt", "r", stdin); \
     freopen("output.txt", "w", stdout); \
   } while (0)
-#else
-  #include <bits/stdc++.h>
-  #define USE_IO()
 #endif
 
 using namespace std;
@@ -103,11 +105,6 @@ typedef ve<vpss>   vvpss;
 
 #define FAST_IO ios::sync_with_stdio(0); cin.tie(0)
 
-#ifdef MYDEBUG
-  #define dbe(...) __DEBUG_UTIL__::printer(#__VA_ARGS__, __VA_ARGS__)
-#else
-  #define dbe(...) 
-#endif
 
 void solve() {
 }
@@ -122,7 +119,7 @@ int main() {
 #endif
 
   int T = 1;
-  cin >> T;
+  // cin >> T;
 
   while (T--) solve();
 
