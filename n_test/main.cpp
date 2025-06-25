@@ -106,7 +106,9 @@ typedef ve<vpss>   vvpss;
 #define FAST_IO ios::sync_with_stdio(0); cin.tie(0)
 
 
-void solve() {
+void solve(int ntc) {
+
+  cout << "Case #" << ntc << " " << 42 << "\n";
 }
 
 int main() {
@@ -119,9 +121,11 @@ int main() {
 #endif
 
   int T = 1;
-  // cin >> T;
+  cin >> T;
 
-  while (T--) solve();
+  for(int t = 1; t <= T; t++) {
+    solve(t);
+  }
 
 #ifdef MYDEBUG
   auto end = std::chrono::high_resolution_clock::now();
