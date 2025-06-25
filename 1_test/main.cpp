@@ -117,11 +117,8 @@ int main() {
   std::cerr << "\033[1;36m[DEBUG]\033[0m \033[1;33mExecution started...\033[0m\n";
   auto start = std::chrono::high_resolution_clock::now();
 #endif
-
-  int T = 1;
-  // cin >> T;
-
-  while (T--) solve();
+  
+  solve();
 
 #ifdef MYDEBUG
   auto end = std::chrono::high_resolution_clock::now();
