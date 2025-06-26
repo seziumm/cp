@@ -1,14 +1,14 @@
 #ifdef MYDEBUG
-  #include "debug.h"
-  #define USE_IO()
-  #define dbe(...) __DEBUG_UTIL__::printer(#__VA_ARGS__, __VA_ARGS__)
+#include "debug.h"
+#define USE_IO()
+#define dbe(...) __DEBUG_UTIL__::printer(#__VA_ARGS__, __VA_ARGS__)
 #else
-  #include <bits/stdc++.h>
-  #define dbe(...) 
-  #define USE_IO() do { \
-    freopen("input.txt", "r", stdin); \
-    freopen("output.txt", "w", stdout); \
-  } while (0)
+#include <bits/stdc++.h>
+#define dbe(...) 
+#define USE_IO() do { \
+  freopen("input.txt", "r", stdin); \
+  freopen("output.txt", "w", stdout); \
+} while (0)
 #endif
 
 #define F     first
@@ -110,8 +110,40 @@ typedef ve<vpss>   vvpss;
 
 
 void solve(int ntc) {
+  int n, m;
+  cin >> n >> m;
 
-  cout << "Case #" << ntc << " " << 42 << "\n";
+  vector<vector<int>> a(n, vector<int> (m));
+  int mx = 0, cnt_mx = 0;
+
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+      cin >> a[i][j];
+      if (a[i][j] > mx) {
+        mx = a[i][j], cnt_mx = 1;
+      } else if (a[i][j] == mx) {
+        cnt_mx++;
+      }
+    }
+  }
+  vector<int> r(n), c(m);
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+      if (a[i][j] == mx) {
+        r[i]++;
+        c[j]++;
+      }
+    }
+  }
+  int flag = 0;
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+      if (r[i] + c[j] - (a[i][j] == mx) == cnt_mx) {
+        flag = 1;
+      }
+    }
+  }
+  cout << mx - flag;
 }
 
 int main() {
@@ -128,13 +160,14 @@ int main() {
 
   for(int t = 1; t <= T; t++) {
     solve(t);
+    cout << endl;
   }
 
 #ifdef MYDEBUG
   auto end = std::chrono::high_resolution_clock::now();
   double time_spent = std::chrono::duration<double>(end - start).count();
   std::cerr << "\033[1;32mTIME ELAPSED: \033[1;33m"
-            << std::fixed << std::setprecision(3) << time_spent << "s\033[0m\n";
+    << std::fixed << std::setprecision(3) << time_spent << "s\033[0m\n";
 #endif
 
   return 0;

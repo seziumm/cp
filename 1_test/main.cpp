@@ -11,6 +11,9 @@
   } while (0)
 #endif
 
+#define F     first
+#define S     second
+
 using namespace std;
 
 typedef long long ll;
