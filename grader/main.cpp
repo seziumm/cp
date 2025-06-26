@@ -11,6 +11,9 @@
   } while (0)
 #endif
 
+#define F     first
+#define S     second
+
 using namespace std;
 
 typedef long long ll;
@@ -93,8 +96,6 @@ typedef ve<vpss>   vvpss;
 #define sz(a) int((a).size())
 
 #define mk    make_pair
-#define F     first
-#define S     second
 #define MOD   1000000007
 
 #define all(v)    (v).begin(),  (v).end()
@@ -105,7 +106,6 @@ typedef ve<vpss>   vvpss;
 
 #define FAST_IO ios::sync_with_stdio(0); cin.tie(0)
 
-
 int foo() {
   return 42;
 }
@@ -113,7 +113,13 @@ int foo() {
 #ifdef MYDEBUG
 
 void solve() {
-  // input might go here
+  int n;
+  cin >> n;
+
+  vi h(n);
+  for(auto &i : h) cin >> i;
+
+  cout << sbugiarda(n, h);
 
 }
 
